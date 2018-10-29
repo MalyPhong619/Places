@@ -1,45 +1,49 @@
-//business logic for Places
-function Places() {
-  this.information = [],
-  this.currentId = 0
-}
+//business logic for information
+ function Information(name, location, landmark, timeOfTheYear) {
+   this.name = name;
+   this.location = location,
+   this.landmark = landmark,
+   this.timeOfTheYear = timeOfTheYear
+   this.currentId = 0;
+   this.info = [];
+ }
 
-function Information(name, location, landmark, timeOfTheYear) {
-  this.name = name;
-  this.location = location,
-  this.landmark = landmark,
-  this.timeOfTheYear = timeOfTheYear
-}
-
-Places.prototype.assignId = function() {
+ Information.prototype.assignId = function() {
   this.currentId += 1;
   return this.currentId;
 }
 
-Places.prototype.addInformation = function(information) {
+Information.prototype.addInformation = function(info) {
   information.id = this.assignId();
-  this.information.push(information);
+  this.info.push(info);
 }
 
-Places.prototype.findInformation = function(id) {
-  for (var i = 0; i< this.information.length; i++) {
-    if  (this.information[i].id === id) {
-      return this.information[i];
+Information.prototype.findInformation = function(id) {
+  for (var i = 0; i < this.info.length; i++) {
+    if  (this.info[i].id === id) {
+      return this.info[i];
     }
   };
   return false;
 }
-Places.prototype.deleteInformation = function(id) {
-  for (var i = 0; i< this.information.length; i++) {
-    if (this.information[i].id === id) {
-      delete this.information[i];
+
+Information.prototype.deleteInformation = function(id) {
+  for (var i = 0; i< this.info.length; i++) {
+    if (this.info[i].id === id) {
+      delete this.info[i];
       return true;
     }
   };
   return false;
 }
 
+// output for Information (backend function)
+  Information.prototype.outputInfo = function() {
+   return "<h1 id='" + this.info + "'>" + this.name + "</h1>" + "<p> You visited <span class='italics'>" + this.location + "</span> in the <span class='italics'>" + this.timeOfTheYear + "</span> and you've seen <span class='italics'>" + this.landmark + "</span>";
+}
 
+
+//  User Interface Logic
 $(document).ready(function() {
   $(".places-form").submit(function(event) {
     event.preventDefault();
@@ -50,7 +54,12 @@ $(document).ready(function() {
     var inputYear = $("#userYear").val();
 
     var info = new Information (inputName, inputLocation, inputLandmark, inputYear);
+    var resultOutput = info.outputInfo();
 
-    console.log(info);
-  });
+    $(".output").append(resultOutput);
+    $("h1").click(function(){
+      $("p").toggle();
+    })
+
+  })
 });
